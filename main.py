@@ -2,7 +2,8 @@ import tsp_graph_init
 
 
 def main():
-    print("Hello World!")
+    MyGraph = tsp_graph_init.Graph("/Users/arthurlamard/Documents/ISEN5/spacial_AI/lieux/graph_5.csv")
+    MyGraph.charger_graph()
 
 
 if __name__ == '__main__':

@@ -1,7 +1,7 @@
 import numpy as np
 import random as rd
 import time
-import pandas
+import pandas as pd
 import tkinter as tk
 import csv
 
@@ -47,10 +47,11 @@ class Graph:
 
     def charger_graph(self):
         if self.csv_file is not None:
-            with open(self.csv_file, 'r') as file:
-                reader = csv.reader(file)
-                for row in reader:
-                    self.liste_lieux.append(Lieu(int(row[0]), int(row[1]), row[2]))
+            df = pd.read_csv(self.csv_file)
+            print(df)
+            for i in range(len(df)):
+                self.liste_lieux.append(Lieu(df['x'][i], df['y'][i], df['nom'][i]))
+
         else:
             # creation de lieux aleatoires
             for i in range(self.nb_lieux):
