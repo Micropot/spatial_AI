@@ -102,11 +102,53 @@ class Route:
             self.ordre = ordre[:]
             if self.ordre[0] != self.ordre[-1]:
                 self.ordre.append(ordre[0])
+
+
 class Affichage:
-    def __init__(self):
-        self.graph = Graph()
-        self.root = tk.Tk()
-        self.root.title("TSP")
-        self.canvas = tk.Canvas(self.root, width=self.graph.largeur, height=self.graph.hauteur, bg="white")
+    def __init__(self, graph, ordre):
+        self.graph = graph
+        self.ordre = ordre
+
+        self.fenetre = tk.Tk()
+        self.fenetre.title("VotreNomDeGroupe - Affichage Graphique")
+
+        self.LARGEUR = 800
+        self.HAUTEUR = 600
+
+        self.canvas = tk.Canvas(self.fenetre, width=self.LARGEUR, height=self.HAUTEUR, bg="white")
         self.canvas.pack()
-        self.root.mainloop()
+
+        self.texte_info = tk.Text(self.fenetre, height=5, width=50)
+        self.texte_info.pack()
+
+        self.fenetre.bind("<Key>", self.gerer_touche)
+        self.fenetre.protocol("WM_DELETE_WINDOW", self.quitter)
+
+    def afficher_lieux(self):
+        for lieu in self.graph.liste_lieux:
+            x, y = lieu.x, lieu.y
+            self.canvas.create_oval(x - 10, y - 10, x + 10, y + 10, fill="red")
+            self.canvas.create_text(x, y, text=lieu.nom, fill="black")
+
+    def afficher_ordre(self, ordre):
+        for i in range(len(ordre) - 1):
+            x1, y1 = self.graph.liste_lieux[ordre[i]].x, self.graph.liste_lieux[ordre[i]].y
+            x2, y2 = self.graph.liste_lieux[ordre[i + 1]].x, self.graph.liste_lieux[ordre[i + 1]].y
+            self.canvas.create_line(x1, y1, x2, y2, fill="black", width=2, dash=(4, 4))
+
+    def afficher_infos(self, infos):
+        self.texte_info.delete(1.0, tk.END)
+        self.texte_info.insert(tk.END, infos)
+
+    def gerer_touche(self, event):
+        if event.keysym == "Escape":
+            self.quitter()
+        elif event.char == 'n':
+            self.afficher_ordre(self.ordre)
+
+    def quitter(self):
+        self.fenetre.destroy()
+
+    def executer(self):
+        self.afficher_lieux()
+        self.fenetre.mainloop()
