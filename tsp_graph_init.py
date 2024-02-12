@@ -5,20 +5,24 @@ import pandas
 import tkinter as tk
 import csv
 
+
 # traveling salesman problem with genetic algorithm
 
 
 class Lieu:
-    def __init__(self, x, y):
+    def __init__(self, xinit, yinit, nom):
         # coordonnes du lieu à visiter
-        self.x = x
-        self.y = y
+        self.x = xinit
+        self.y = yinit
         # nom du lieu
-        self.nom = None
-        self.distance_2_lieux = None
+        self.nom = nom
 
     def distance(self, lieu):
         return np.sqrt((self.x - lieu.x) ** 2 + (self.y - lieu.y) ** 2)
+
+    def __repr__(self):
+        return (self.nom + " : " + str(self.x) + " " + str(self.y))
+
 
 class Graph:
     def __init__(self):
@@ -40,8 +44,6 @@ class Graph:
 
     def charger_graph(self):
         print("Chargement du graph")
-
-
 
 
 class Route:
