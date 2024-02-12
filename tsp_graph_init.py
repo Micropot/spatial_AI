@@ -54,7 +54,7 @@ class Graph:
         else:
             # creation de lieux aleatoires
             for i in range(self.nb_lieux):
-                self.liste_lieux.append(Lieu(float(rd.uniform(0, self.largeur)), rd.uniform(0, self.hauteur), str(i)))
+                self.liste_lieux.append(Lieu(rd.uniform(0, self.largeur), rd.uniform(0, self.hauteur), str(i)))
         print("self.liste_lieux", type(self.liste_lieux[0]))
 class Route:
     def __init__(self):
