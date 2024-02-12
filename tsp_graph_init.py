@@ -7,7 +7,7 @@ import csv
 
 
 # traveling salesman problem with genetic algorithm
-
+NB_LIEUX = 4
 
 class Lieu:
     def __init__(self, xinit, yinit, nom=""):
@@ -30,16 +30,16 @@ class Graph:
         self.largeur = 800
         self.hauteur = 600
         self.liste_lieux = []
-        self.nb_lieux = 4
+        NB_LIEUX = 4
         self.matrice_od = None
         self.voisins = None
         self.csv_file = csv_file
 
 
     def calcul_matrice_cout_od(self):
-        self.matrice_od = np.zeros((self.nb_lieux, self.nb_lieux))
-        for i in range(self.nb_lieux):
-            for j in range(i+1,self.nb_lieux):
+        self.matrice_od = np.zeros((NB_LIEUX, NB_LIEUX))
+        for i in range(NB_LIEUX):
+            for j in range(i+1,NB_LIEUX):
                 self.matrice_od[i, j] = self.liste_lieux[i].distance(self.liste_lieux[j])
                 self.matrice_od[j, i] = self.liste_lieux[i].distance(self.liste_lieux[j])
         print("self.matrice_od: ", self.matrice_od)
@@ -63,41 +63,44 @@ class Graph:
 
         else:
             # creation de lieux aleatoires
-            for i in range(self.nb_lieux):
+            for i in range(NB_LIEUX):
                 self.liste_lieux.append(Lieu(rd.uniform(0, self.largeur), rd.uniform(0, self.hauteur), str(i)))
         print("self.liste_lieux", type(self.liste_lieux[0]))
 
     def determination_ordre_ppv(self):
         ordre = [0]
         lieu_actuel = 0
-        voisins = list(range(1, self.nb_lieux))
+        voisins = list(range(1, NB_LIEUX))
         while len(voisins) > 0:
             lieu_suivant = self.plus_proche_voisins(lieu_actuel, voisins)
             ordre.append(lieu_suivant)
             lieu_actuel = lieu_suivant
             voisins.remove(lieu_suivant)
         ordre.append(0)
-        print("ordre: ", ordre)
-        MyRoute = Route()
-        MyRoute.ordre = ordre
-        print("MyRoute.ordre: ", MyRoute.ordre)
-        print(type(MyRoute))
-        return MyRoute
+
+        return Route(ordre)
 
     def calcul_distance_route(self, route):
         distance = 0
-        for i in range(self.nb_lieux):
+        for i in range(NB_LIEUX):
             distance += self.matrice_od[route.ordre[i], route.ordre[i+1]]
         print("distance: ", distance)
+        Route.distance = distance
         return distance
 
 
 class Route:
-    def __init__(self):
-        self.ordre = []
+    def __init__(self, ordre = None):
+        self.distance = None
 
-
-
+        if ordre is None:
+            self.ordre = [0]
+            self.ordre.extend(rd.sample(range(1, NB_LIEUX), NB_LIEUX-1))
+            self.ordre.append(0)
+        else:
+            self.ordre = ordre[:]
+            if self.ordre[0] != self.ordre[-1]:
+                self.ordre.append(ordre[0])
 class Affichage:
     def __init__(self):
         self.graph = Graph()
