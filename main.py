@@ -12,9 +12,9 @@ def main():
     MyRoute = tsp_graph_init.Route(ordre=None)
     print("ordre route ppv : ",MyGraph.determination_ordre_ppv().ordre)
     print("ordre route aléatoire : ",MyRoute.ordre)
-    MyGraph.calcul_distance_route(MyRoute)
+    distance = MyGraph.calcul_distance_route(MyRoute)
 
-    affichage = tsp_graph_init.Affichage(MyGraph, ordre=MyGraph.determination_ordre_ppv().ordre)
+    affichage = tsp_graph_init.Affichage(MyGraph, ordre=MyGraph.determination_ordre_ppv().ordre, distance=distance)
     affichage.executer()
 if __name__ == '__main__':
     main()

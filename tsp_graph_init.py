@@ -105,10 +105,10 @@ class Route:
 
 
 class Affichage:
-    def __init__(self, graph, ordre):
+    def __init__(self, graph, ordre, distance):
         self.graph = graph
         self.ordre = ordre
-
+        self.distance = distance
         self.fenetre = tk.Tk()
         self.fenetre.title("VotreNomDeGroupe - Affichage Graphique")
 
@@ -140,12 +140,25 @@ class Affichage:
         self.texte_info.delete(1.0, tk.END)
         self.texte_info.insert(tk.END, infos)
 
+    def afficher_matrice_cout(self):
+        matrice_cout = self.graph.matrice_od
+        texte_matrice = "Matrice de coûts :\n"
+        for i in range(len(matrice_cout)):
+            for j in range(len(matrice_cout[i])):
+                texte_matrice += f"{matrice_cout[i, j]:.2f}\t"
+            texte_matrice += "\n"
+        self.texte_info.delete(1.0, tk.END)
+        self.texte_info.insert(tk.END, texte_matrice)
+
     def gerer_touche(self, event):
         if event.keysym == "Escape":
             self.quitter()
         elif event.char == 'n':
             self.afficher_ordre(self.ordre)
-
+            self.afficher_matrice_cout()
+        elif event.char == 'i':
+            infos = f"Distance parcourue : {self.distance:.2f}\n"
+            self.afficher_infos(infos)
     def quitter(self):
         self.fenetre.destroy()
 
