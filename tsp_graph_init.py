@@ -10,7 +10,7 @@ import csv
 
 
 class Lieu:
-    def __init__(self, xinit, yinit, nom):
+    def __init__(self, xinit, yinit, nom=""):
         # coordonnes du lieu à visiter
         self.x = xinit
         self.y = yinit
@@ -48,15 +48,13 @@ class Graph:
     def charger_graph(self):
         if self.csv_file is not None:
             df = pd.read_csv(self.csv_file)
-            print(df)
             for i in range(len(df)):
-                self.liste_lieux.append(Lieu(df['x'][i], df['y'][i], df['nom'][i]))
+                self.liste_lieux.append(Lieu(df['x'][i], df['y'][i]))
 
         else:
             # creation de lieux aleatoires
             for i in range(self.nb_lieux):
                 self.liste_lieux.append(Lieu(rd.randint(0, self.largeur), rd.randint(0, self.hauteur), str(i)))
-
 
 class Route:
     def __init__(self):
