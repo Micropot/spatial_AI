@@ -17,6 +17,7 @@ class Lieu:
         # nom du lieu
         self.nom = nom
 
+    # calcul la distance entre un point et l'argument de départ
     def distance(self, lieu):
         return np.sqrt((self.x - lieu.x) ** 2 + (self.y - lieu.y) ** 2)
 
@@ -25,13 +26,15 @@ class Lieu:
 
 
 class Graph:
-    def __init__(self):
+    def __init__(self, csv_file):
         self.largeur = 800
-        self.hauteur = 800
+        self.hauteur = 600
         self.liste_lieux = []
         self.nb_lieux = 10
         self.matrice_od = None
         self.plus_proche_voisins = None
+        self.csv_file = csv_file
+
 
     def calcul_matrice_cout_od(self):
         self.matrice_od = np.zeros((self.nb_lieux, self.nb_lieux))
@@ -43,7 +46,15 @@ class Graph:
         print("Calcul des plus proches voisins")
 
     def charger_graph(self):
-        print("Chargement du graph")
+        if self.csv_file is not None:
+            with open(self.csv_file, 'r') as file:
+                reader = csv.reader(file)
+                for row in reader:
+                    self.liste_lieux.append(Lieu(int(row[0]), int(row[1]), row[2]))
+        else:
+            # creation de lieux aleatoires
+            for i in range(self.nb_lieux):
+                self.liste_lieux.append(Lieu(rd.randint(0, self.largeur), rd.randint(0, self.hauteur), str(i)))
 
 
 class Route:
