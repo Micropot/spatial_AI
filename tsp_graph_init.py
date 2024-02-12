@@ -30,18 +30,18 @@ class Graph:
         self.largeur = 800
         self.hauteur = 600
         self.liste_lieux = []
-        self.nb_lieux = 15
+        self.nb_lieux = 3
         self.matrice_od = None
         self.plus_proche_voisins = None
         self.csv_file = csv_file
 
-
+# TODO:  optimiser la fonction calcul_matrice_cout_od
     def calcul_matrice_cout_od(self):
         self.matrice_od = np.zeros((self.nb_lieux, self.nb_lieux))
         for i in range(self.nb_lieux):
             for j in range(self.nb_lieux):
                 self.matrice_od[i, j] = self.liste_lieux[i].distance(self.liste_lieux[j])
-
+        print("self.matrice_od: ",self.matrice_od)
     def plus_proche_voisins(self):
         print("Calcul des plus proches voisins")
 
