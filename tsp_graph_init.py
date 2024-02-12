@@ -39,8 +39,9 @@ class Graph:
     def calcul_matrice_cout_od(self):
         self.matrice_od = np.zeros((self.nb_lieux, self.nb_lieux))
         for i in range(self.nb_lieux):
-            for j in range(self.nb_lieux):
+            for j in range(i+1,self.nb_lieux):
                 self.matrice_od[i, j] = self.liste_lieux[i].distance(self.liste_lieux[j])
+                self.matrice_od[j, i] = self.liste_lieux[i].distance(self.liste_lieux[j])
         print("self.matrice_od: ", self.matrice_od)
 
     def plus_proche_voisins(self, lieu, voisins):
