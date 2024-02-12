@@ -67,7 +67,7 @@ class Graph:
                 self.liste_lieux.append(Lieu(rd.uniform(0, self.largeur), rd.uniform(0, self.hauteur), str(i)))
         print("self.liste_lieux", type(self.liste_lieux[0]))
 
-    def calcul_distance_route(self):
+    def determination_ordre_ppv(self):
         ordre = [0]
         lieu_actuel = 0
         voisins = list(range(1, self.nb_lieux))
@@ -78,11 +78,24 @@ class Graph:
             voisins.remove(lieu_suivant)
         ordre.append(0)
         print("ordre: ", ordre)
+        MyRoute = Route()
+        MyRoute.ordre = ordre
+        print("MyRoute.ordre: ", MyRoute.ordre)
+        print(type(MyRoute))
+        return MyRoute
+
+    def calcul_distance_route(self, route):
+        distance = 0
+        for i in range(self.nb_lieux):
+            distance += self.matrice_od[route.ordre[i], route.ordre[i+1]]
+        print("distance: ", distance)
+        return distance
 
 
 class Route:
     def __init__(self):
-        self.ordre = None
+        self.ordre = []
+
 
 
 class Affichage:

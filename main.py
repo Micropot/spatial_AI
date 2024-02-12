@@ -6,7 +6,8 @@ def main():
     MyGraph.charger_graph()
     MyGraph.calcul_matrice_cout_od()
     #MyGraph.plus_proche_voisins(lieu=0, voisins=list(range(MyGraph.nb_lieux)))
-    MyGraph.calcul_distance_route()
+    #MyGraph.determination_ordre_ppv()
+    MyGraph.calcul_distance_route(MyGraph.determination_ordre_ppv())
 
 
 if __name__ == '__main__':
