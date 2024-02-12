@@ -30,7 +30,7 @@ class Graph:
         self.largeur = 800
         self.hauteur = 600
         self.liste_lieux = []
-        self.nb_lieux = 10
+        self.nb_lieux = 15
         self.matrice_od = None
         self.plus_proche_voisins = None
         self.csv_file = csv_file
@@ -54,8 +54,8 @@ class Graph:
         else:
             # creation de lieux aleatoires
             for i in range(self.nb_lieux):
-                self.liste_lieux.append(Lieu(rd.randint(0, self.largeur), rd.randint(0, self.hauteur), str(i)))
-
+                self.liste_lieux.append(Lieu(float(rd.uniform(0, self.largeur)), rd.uniform(0, self.hauteur), str(i)))
+        print("self.liste_lieux", type(self.liste_lieux[0]))
 class Route:
     def __init__(self):
         self.ordre = None
