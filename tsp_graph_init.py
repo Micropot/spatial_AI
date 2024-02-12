@@ -30,20 +30,29 @@ class Graph:
         self.largeur = 800
         self.hauteur = 600
         self.liste_lieux = []
-        self.nb_lieux = 3
+        self.nb_lieux = 4
         self.matrice_od = None
-        self.plus_proche_voisins = None
+        self.voisins = None
         self.csv_file = csv_file
 
-# TODO:  optimiser la fonction calcul_matrice_cout_od
+    # TODO:  optimiser la fonction calcul_matrice_cout_od
     def calcul_matrice_cout_od(self):
         self.matrice_od = np.zeros((self.nb_lieux, self.nb_lieux))
         for i in range(self.nb_lieux):
             for j in range(self.nb_lieux):
                 self.matrice_od[i, j] = self.liste_lieux[i].distance(self.liste_lieux[j])
-        print("self.matrice_od: ",self.matrice_od)
-    def plus_proche_voisins(self):
-        print("Calcul des plus proches voisins")
+        print("self.matrice_od: ", self.matrice_od)
+
+    def plus_proche_voisins(self, lieu, voisins):
+        try:
+            voisins.remove(lieu)
+        except:
+            pass
+        ligne = self.matrice_od[lieu, voisins]
+        print("ligne: ", ligne)
+        v = voisins[np.argmin(ligne)]
+        print("v: ", v)
+        return v
 
     def charger_graph(self):
         if self.csv_file is not None:
@@ -56,6 +65,8 @@ class Graph:
             for i in range(self.nb_lieux):
                 self.liste_lieux.append(Lieu(rd.uniform(0, self.largeur), rd.uniform(0, self.hauteur), str(i)))
         print("self.liste_lieux", type(self.liste_lieux[0]))
+
+
 class Route:
     def __init__(self):
         self.ordre = None
