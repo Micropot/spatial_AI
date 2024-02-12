@@ -9,18 +9,16 @@ import csv
 
 
 class Lieu:
-    def __init__(self):
-        # cooredonnes du lieu à visiter
-        self.x = None
-        self.y = None
+    def __init__(self, x, y):
+        # coordonnes du lieu à visiter
+        self.x = x
+        self.y = y
         # nom du lieu
         self.nom = None
-
         self.distance_2_lieux = None
 
     def distance(self, lieu):
-        self.distance_2_lieux =  np.sqrt((self.x - lieu.x)**2 + (self.y - lieu.y)**2)
-        return(self.distance_2_lieux)
+        return np.sqrt((self.x - lieu.x) ** 2 + (self.y - lieu.y) ** 2)
 
 class Graph:
     def __init__(self):
@@ -39,6 +37,10 @@ class Graph:
 
     def plus_proche_voisins(self):
         print("Calcul des plus proches voisins")
+
+    def charger_graph(self):
+        print("Chargement du graph")
+
 
 
 
