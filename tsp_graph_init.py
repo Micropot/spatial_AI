@@ -35,7 +35,7 @@ class Graph:
         self.voisins = None
         self.csv_file = csv_file
 
-    # TODO:  optimiser la fonction calcul_matrice_cout_od
+
     def calcul_matrice_cout_od(self):
         self.matrice_od = np.zeros((self.nb_lieux, self.nb_lieux))
         for i in range(self.nb_lieux):
@@ -66,6 +66,18 @@ class Graph:
             for i in range(self.nb_lieux):
                 self.liste_lieux.append(Lieu(rd.uniform(0, self.largeur), rd.uniform(0, self.hauteur), str(i)))
         print("self.liste_lieux", type(self.liste_lieux[0]))
+
+    def calcul_distance_route(self):
+        ordre = [0]
+        lieu_actuel = 0
+        voisins = list(range(1, self.nb_lieux))
+        while len(voisins) > 0:
+            lieu_suivant = self.plus_proche_voisins(lieu_actuel, voisins)
+            ordre.append(lieu_suivant)
+            lieu_actuel = lieu_suivant
+            voisins.remove(lieu_suivant)
+        ordre.append(0)
+        print("ordre: ", ordre)
 
 
 class Route:
