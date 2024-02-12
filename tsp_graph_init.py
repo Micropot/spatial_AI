@@ -82,7 +82,7 @@ class Graph:
 
     def calcul_distance_route(self, route):
         distance = 0
-        for i in range(NB_LIEUX):
+        for i in range(0,len(route.ordre)-1):
             distance += self.matrice_od[route.ordre[i], route.ordre[i+1]]
         print("distance: ", distance)
         Route.distance = distance
@@ -94,6 +94,7 @@ class Route:
         self.distance = None
 
         if ordre is None:
+            print("Ordre aleatoire:")
             self.ordre = [0]
             self.ordre.extend(rd.sample(range(1, NB_LIEUX), NB_LIEUX-1))
             self.ordre.append(0)
