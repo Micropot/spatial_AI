@@ -16,9 +16,11 @@ class Lieu:
         # nom du lieu
         self.nom = None
 
-    def distance(self, lieu):
-        return np.sqrt((self.x - lieu.x)**2 + (self.y - lieu.y)**2)
+        self.distance_2_lieux = None
 
+    def distance(self, lieu):
+        self.distance_2_lieux =  np.sqrt((self.x - lieu.x)**2 + (self.y - lieu.y)**2)
+        return(self.distance_2_lieux)
 
 class Graph:
     def __init__(self):
