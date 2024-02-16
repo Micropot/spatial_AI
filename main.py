@@ -21,11 +21,14 @@ def main():
 
 
     affichage = tsp_graph_init.Affichage(MyGraph, ordre=Route_ppv.ordre, distance=Route_ppv.distance)
-    affichage.executer()
+    #affichage.executer()
 
 
     print("GRAPH_ppv : ",Route_ppv)
     print("ROUTE_aléatoire : ",MyRoute)
+
+    algo = tsp_graph_init.TSP_GA(MyGraph, population_size=10, elite_size=5, mutation_rate=0.01, generations=100)
+    algo.initialiser_population()
 
 
 

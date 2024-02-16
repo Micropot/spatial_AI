@@ -5,9 +5,9 @@ import pandas as pd
 import tkinter as tk
 import csv
 
-
 # traveling salesman problem with genetic algorithm
 NB_LIEUX = 20
+
 
 class Lieu:
     def __init__(self, xinit, yinit, nom=""):
@@ -35,12 +35,10 @@ class Graph:
         self.voisins = None
         self.csv_file = csv_file
 
-
-
     def calcul_matrice_cout_od(self):
         self.matrice_od = np.zeros((NB_LIEUX, NB_LIEUX))
         for i in range(NB_LIEUX):
-            for j in range(i+1,NB_LIEUX):
+            for j in range(i + 1, NB_LIEUX):
                 self.matrice_od[i, j] = self.liste_lieux[i].distance(self.liste_lieux[j])
                 self.matrice_od[j, i] = self.liste_lieux[i].distance(self.liste_lieux[j])
         print("self.matrice_od: ", self.matrice_od)
@@ -51,9 +49,9 @@ class Graph:
         except:
             pass
         ligne = self.matrice_od[lieu, voisins]
-        #print("ligne: ", ligne)
+        # print("ligne: ", ligne)
         v = voisins[np.argmin(ligne)]
-        #print("v: ", v)
+        # print("v: ", v)
         return v
 
     def charger_graph(self):
@@ -86,22 +84,22 @@ class Graph:
 
     def calcul_distance_route(self, route):
         distance = 0
-        for i in range(0,len(route.ordre)-1):
-            distance += self.matrice_od[route.ordre[i], route.ordre[i+1]]
-        #print("distance: ", distance)
+        for i in range(0, len(route.ordre) - 1):
+            distance += self.matrice_od[route.ordre[i], route.ordre[i + 1]]
+        # print("distance: ", distance)
         route.distance = distance
-        #print("Route.distance: ", Route.distance)
+        # print("Route.distance: ", Route.distance)
         return distance
 
 
 class Route:
-    def __init__(self, ordre = None):
+    def __init__(self, ordre=None):
         self.distance = None
 
         if ordre is None:
-            #print("Ordre aleatoire:")
+            # print("Ordre aleatoire:")
             self.ordre = [0]
-            self.ordre.extend(rd.sample(range(1, NB_LIEUX), NB_LIEUX-1))
+            self.ordre.extend(rd.sample(range(1, NB_LIEUX), NB_LIEUX - 1))
             self.ordre.append(0)
         else:
             self.ordre = ordre[:]
@@ -192,9 +190,31 @@ class Affichage:
         elif event.char == 'i':
             infos = f"Distance parcourue : {self.distance:.2f}\n"
             self.afficher_infos(infos)
+
     def quitter(self):
         self.fenetre.destroy()
 
     def executer(self):
         self.afficher_lieux()
         self.fenetre.mainloop()
+
+
+class TSP_GA:
+    def __init__(self, graph, population_size, elite_size, mutation_rate, generations):
+        self.graph = graph
+        self.population_size = population_size
+        self.elite_size = elite_size
+        self.mutation_rate = mutation_rate
+        self.generations = generations
+        self.population = []
+
+    def initialiser_population(self):
+        for i in range(self.population_size):
+            self.population.append(Route())
+            self.population[i].distance = self.graph.calcul_distance_route(self.population[i])
+        print("self.population: ", self.population)
+        print("len(self.population): ", len(self.population))
+
+    def selectionner_meilleurs(self):
+        self.population = sorted(self.population, reverse=True)
+        return self.population[:self.elite_size]
