@@ -43,7 +43,7 @@ class Graph:
             for j in range(i+1,NB_LIEUX):
                 self.matrice_od[i, j] = self.liste_lieux[i].distance(self.liste_lieux[j])
                 self.matrice_od[j, i] = self.liste_lieux[i].distance(self.liste_lieux[j])
-        print("self.matrice_od: ", self.matrice_od)
+        #print("self.matrice_od: ", self.matrice_od)
 
     def plus_proche_voisins(self, lieu, voisins):
         try:
@@ -51,9 +51,9 @@ class Graph:
         except:
             pass
         ligne = self.matrice_od[lieu, voisins]
-        print("ligne: ", ligne)
+        #print("ligne: ", ligne)
         v = voisins[np.argmin(ligne)]
-        print("v: ", v)
+        #print("v: ", v)
         return v
 
     def charger_graph(self):
@@ -66,7 +66,7 @@ class Graph:
             # creation de lieux aleatoires
             for i in range(NB_LIEUX):
                 self.liste_lieux.append(Lieu(rd.uniform(0, self.largeur), rd.uniform(0, self.hauteur), str(i)))
-        print("self.liste_lieux", type(self.liste_lieux[0]))
+        #print("self.liste_lieux", type(self.liste_lieux[0]))
 
     def determination_ordre_ppv(self):
         ordre = [0]
@@ -85,8 +85,9 @@ class Graph:
         distance = 0
         for i in range(0,len(route.ordre)-1):
             distance += self.matrice_od[route.ordre[i], route.ordre[i+1]]
-        print("distance: ", distance)
-        Route.distance = distance
+        #print("distance: ", distance)
+        route.distance = distance
+        #print("Route.distance: ", Route.distance)
         return distance
 
 
@@ -95,7 +96,7 @@ class Route:
         self.distance = None
 
         if ordre is None:
-            print("Ordre aleatoire:")
+            #print("Ordre aleatoire:")
             self.ordre = [0]
             self.ordre.extend(rd.sample(range(1, NB_LIEUX), NB_LIEUX-1))
             self.ordre.append(0)
@@ -103,6 +104,7 @@ class Route:
             self.ordre = ordre[:]
             if self.ordre[0] != self.ordre[-1]:
                 self.ordre.append(ordre[0])
+
     def __gt__(self, other):
         if self.distance is None or other.distance is None:
             raise ValueError("Distances must be calculated before comparison.")
@@ -122,6 +124,14 @@ class Route:
         if self.ordre is None or other.ordre is None:
             raise ValueError("Distances must be calculated before comparison.")
         return self.ordre == other.ordre
+
+    '''def __le__(self, other):
+        if self.distance is None or other.distance is None:
+            raise ValueError("Distances must be calculated before comparison.")
+        return self.distance <= other.distance'''
+
+    def __repr__(self):
+        return f"Ordre : {self.ordre}, Distance : {self.distance}"
 
 
 class Affichage:
@@ -185,3 +195,6 @@ class Affichage:
     def executer(self):
         self.afficher_lieux()
         self.fenetre.mainloop()
+
+
+class TSP_GA:
