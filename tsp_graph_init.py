@@ -110,7 +110,7 @@ class Affichage:
         self.ordre = ordre
         self.distance = distance
         self.fenetre = tk.Tk()
-        self.fenetre.title("VotreNomDeGroupe - Affichage Graphique")
+        self.fenetre.title("Groupe 5 - TSP Genetic Algorithm")
 
         self.LARGEUR = 800
         self.HAUTEUR = 600
@@ -134,7 +134,7 @@ class Affichage:
         for i in range(len(ordre) - 1):
             x1, y1 = self.graph.liste_lieux[ordre[i]].x, self.graph.liste_lieux[ordre[i]].y
             x2, y2 = self.graph.liste_lieux[ordre[i + 1]].x, self.graph.liste_lieux[ordre[i + 1]].y
-            self.canvas.create_line(x1, y1, x2, y2, fill="black", width=2, dash=(4, 4))
+            self.canvas.create_line(x1, y1, x2, y2, fill="blue", width=2, dash=(4, 4))
 
     def afficher_infos(self, infos):
         self.texte_info.delete(1.0, tk.END)
