@@ -30,7 +30,7 @@ class Graph:
         self.largeur = 800
         self.hauteur = 600
         self.liste_lieux = []
-        NB_LIEUX = 4
+
         self.matrice_od = None
         self.voisins = None
         self.csv_file = csv_file
