@@ -211,6 +211,17 @@ class TSP_GA:
 
     def initialiser_population(self):
         self.depart = [self.graph.determination_ordre_ppv(lieu_actuel=i) for i in range(NB_LIEUX)]
+
+        for i in range(len(self.depart)):
+            print(self.depart[i])
+            # find 0
+            index = self.depart[i].ordre.index(0)
+            print("index: ", index)
+            # copy the list from index to the 0 included
+            #self.depart[i].ordre = self.depart[i].ordre[index:] + self.depart[i].ordre[:index+1]
+            self.depart[i].ordre = self.remove_consecutive_duplicates(self.depart[i].ordre[index:] + self.depart[i].ordre[:index+1])
+            print("self.depart[i].ordre: ", self.depart[i].ordre)
+
         for route in self.depart:
             route.distance = self.graph.calcul_distance_route(route)
         self.population = self.depart
@@ -218,9 +229,17 @@ class TSP_GA:
         print("self.population: ", self.population)
         return self.population
 
-
     def selectionner_meilleurs(self):
         self.population = sorted(self.population, reverse=False)
         self.best_route = self.population[:self.elite_size]
         print("self.best_route: ", self.best_route)
         return self.best_route
+
+    def remove_consecutive_duplicates(self,route_ordre):
+        result = [route_ordre[0]]  # Add the first element of the list
+
+        for i in range(1, len(route_ordre)):
+            if route_ordre[i] != route_ordre[i - 1]:
+                result.append(route_ordre[i])
+
+        return result
