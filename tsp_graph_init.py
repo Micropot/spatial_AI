@@ -246,6 +246,6 @@ class TSP_GA:
 
         return result
 
-    #TODO : Crossover + mutation(2opt) + selection + affichage
+    #TODO : Crossover + mutation(2opt) + selection + affichage + gérer csv
 
 
