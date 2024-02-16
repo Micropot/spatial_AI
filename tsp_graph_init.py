@@ -69,17 +69,16 @@ class Graph:
                 self.liste_lieux.append(Lieu(rd.uniform(0, self.largeur), rd.uniform(0, self.hauteur), str(i)))
             print("self.liste_lieux", self.liste_lieux)
 
-    def determination_ordre_ppv(self):
-        ordre = [0]
-        lieu_actuel = 0
-        voisins = list(range(1, NB_LIEUX))
+    def determination_ordre_ppv(self, lieu_actuel):
+        ordre = [lieu_actuel]
+        voisins = list(range(NB_LIEUX))
+        voisins.remove(lieu_actuel)
         while len(voisins) > 0:
             lieu_suivant = self.plus_proche_voisins(lieu_actuel, voisins)
             ordre.append(lieu_suivant)
             lieu_actuel = lieu_suivant
             voisins.remove(lieu_suivant)
-        ordre.append(0)
-
+        ordre.append(ordre[0])  # Return to the starting point
         return Route(ordre)
 
     def calcul_distance_route(self, route):
@@ -207,14 +206,21 @@ class TSP_GA:
         self.mutation_rate = mutation_rate
         self.generations = generations
         self.population = []
+        self.best_route = None
+        self.depart = None
 
     def initialiser_population(self):
-        for i in range(self.population_size):
-            self.population.append(Route())
-            self.population[i].distance = self.graph.calcul_distance_route(self.population[i])
+        self.depart = [self.graph.determination_ordre_ppv(lieu_actuel=i) for i in range(NB_LIEUX)]
+        for route in self.depart:
+            route.distance = self.graph.calcul_distance_route(route)
+        self.population = self.depart
+        print("self.depart: ", self.depart)
         print("self.population: ", self.population)
-        print("len(self.population): ", len(self.population))
+        return self.population
+
 
     def selectionner_meilleurs(self):
-        self.population = sorted(self.population, reverse=True)
-        return self.population[:self.elite_size]
+        self.population = sorted(self.population, reverse=False)
+        self.best_route = self.population[:self.elite_size]
+        print("self.best_route: ", self.best_route)
+        return self.best_route
