@@ -36,6 +36,7 @@ class Graph:
         self.csv_file = csv_file
 
 
+
     def calcul_matrice_cout_od(self):
         self.matrice_od = np.zeros((NB_LIEUX, NB_LIEUX))
         for i in range(NB_LIEUX):
@@ -102,6 +103,25 @@ class Route:
             self.ordre = ordre[:]
             if self.ordre[0] != self.ordre[-1]:
                 self.ordre.append(ordre[0])
+    def __gt__(self, other):
+        if self.distance is None or other.distance is None:
+            raise ValueError("Distances must be calculated before comparison.")
+        return self.distance > other.distance
+
+    def __lt__(self, other):
+        if self.distance is None or other.distance is None:
+            raise ValueError("Distances must be calculated before comparison.")
+        return self.distance < other.distance
+
+    def __neq__(self, other):
+        if self.ordre is None or other.ordre is None:
+            raise ValueError("Distances must be calculated before comparison.")
+        return self.ordre != other.ordre
+
+    def __eq__(self, other):
+        if self.ordre is None or other.ordre is None:
+            raise ValueError("Distances must be calculated before comparison.")
+        return self.ordre == other.ordre
 
 
 class Affichage:

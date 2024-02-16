@@ -16,5 +16,10 @@ def main():
 
     affichage = tsp_graph_init.Affichage(MyGraph, ordre=MyGraph.determination_ordre_ppv().ordre, distance=distance)
     affichage.executer()
+
+
+
+
+
 if __name__ == '__main__':
     main()
