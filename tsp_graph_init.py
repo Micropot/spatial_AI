@@ -7,7 +7,7 @@ import csv
 
 
 # traveling salesman problem with genetic algorithm
-NB_LIEUX = 4
+NB_LIEUX = 20
 
 class Lieu:
     def __init__(self, xinit, yinit, nom=""):
@@ -43,7 +43,7 @@ class Graph:
             for j in range(i+1,NB_LIEUX):
                 self.matrice_od[i, j] = self.liste_lieux[i].distance(self.liste_lieux[j])
                 self.matrice_od[j, i] = self.liste_lieux[i].distance(self.liste_lieux[j])
-        #print("self.matrice_od: ", self.matrice_od)
+        print("self.matrice_od: ", self.matrice_od)
 
     def plus_proche_voisins(self, lieu, voisins):
         try:
@@ -59,14 +59,17 @@ class Graph:
     def charger_graph(self):
         if self.csv_file is not None:
             df = pd.read_csv(self.csv_file)
+            print("df: ", df)
             for i in range(len(df)):
                 self.liste_lieux.append(Lieu(df['x'][i], df['y'][i]))
+            print("self.liste_lieux: ", self.liste_lieux)
+            print("len(self.liste_lieux): ", len(self.liste_lieux))
 
         else:
             # creation de lieux aleatoires
             for i in range(NB_LIEUX):
                 self.liste_lieux.append(Lieu(rd.uniform(0, self.largeur), rd.uniform(0, self.hauteur), str(i)))
-        #print("self.liste_lieux", type(self.liste_lieux[0]))
+            print("self.liste_lieux", self.liste_lieux)
 
     def determination_ordre_ppv(self):
         ordre = [0]
@@ -195,6 +198,3 @@ class Affichage:
     def executer(self):
         self.afficher_lieux()
         self.fenetre.mainloop()
-
-
-class TSP_GA:

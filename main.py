@@ -20,8 +20,8 @@ def main():
     #print("distance route aléatoire : ",distance)
 
 
-    #affichage = tsp_graph_init.Affichage(MyGraph, ordre=MyGraph.determination_ordre_ppv().ordre, distance=distance)
-    #affichage.executer()
+    affichage = tsp_graph_init.Affichage(MyGraph, ordre=Route_ppv.ordre, distance=Route_ppv.distance)
+    affichage.executer()
 
 
     print("GRAPH_ppv : ",Route_ppv)
@@ -31,3 +31,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
