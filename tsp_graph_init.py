@@ -248,8 +248,6 @@ class TSP_GA:
 
         return result
 
-    #TODO : Crossover + mutation(2opt) + selection + affichage + gérer csv
-
     def ox_crossover(self, parent1, parent2):
         size = len(parent1.ordre)
         # Choose two random crossover points
@@ -291,10 +289,11 @@ class TSP_GA:
             else:
                 print("current: ", current)
                 print("next_element: ", next_element)
-                mutation = self.mutation(current)
-                print("mutation: ", mutation)
-                # on ajoute la mutation à la population
-                self.pair.append((current, mutation))
+                if rd.random() < self.mutation_rate:
+                    mutation = self.mutation(current)
+                    print("mutation: ", mutation)
+                    # on ajoute la mutation à la population
+                    self.pair.append((current, mutation))
 
 
         print("self.pair: ", self.pair)
