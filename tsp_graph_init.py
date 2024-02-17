@@ -303,19 +303,13 @@ class TSP_GA:
         for i in range(len(self.pair)):
             print("self.pair[i][0]: ", self.pair[i][0])
             print("self.pair[i][1]: ", self.pair[i][1])
-            child = self.ox_crossover(self.pair[i][0], self.pair[i][1])
-            print("child: ", child)
-            self.population.append(child)
-            print("self.population: ", self.population)
-            print('len(self.population): ', len(self.population))
-            '''self.mutation(child)
-            print("child après mutation: ", child)
-            print("child.distance: ", child.distance)
-            print("self.pair[i][0].distance: ", self.pair[i][0].distance)
-            print("self.pair[i][1].distance: ", self.pair[i][1].distance)
-            if child.distance < self.pair[i][0].distance:
-                self.pair[i][0] = child
-            if child.distance < self.pair[i][1].distance:
-                self.pair[i][1] = child'''
+            # Create two children from each pair of parents
+            for j in range(2):
+                child = self.ox_crossover(self.pair[i][0], self.pair[i][1])
+                print("child: ", child)
+                self.population.append(child)
+        print("self.population: ", self.population)
+        print('len(self.population): ', len(self.population))
+
 
 
