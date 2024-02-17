@@ -6,7 +6,7 @@ import tkinter as tk
 import csv
 
 # traveling salesman problem with genetic algorithm
-NB_LIEUX = 20
+NB_LIEUX = 10
 
 
 class Lieu:
@@ -254,6 +254,8 @@ class TSP_GA:
         size = len(parent1.ordre)
         # Choose two random crossover points
         point1, point2 = sorted(rd.sample(range(size), 2))
+        print("point1: ", point1)
+        print("point2: ", point2)
 
         # Initialize the child ordre with a copy of the segment between the crossover points from parent1
         child_ordre = parent1.ordre[point1:point2]
@@ -268,7 +270,7 @@ class TSP_GA:
 
         return child_route
 
-    '''def mutation(self, route):
+    def mutation(self, route):
         # 2-opt mutation implementation
         # Randomly select two positions in the route
         pos1, pos2 = sorted(rd.sample(range(1, NB_LIEUX - 1), 2))
@@ -277,7 +279,7 @@ class TSP_GA:
         route.ordre[pos1:pos2] = route.ordre[pos1:pos2][::-1]
         route.distance = self.graph.calcul_distance_route(route)
 
-        return route'''
+        return route
 
     def run_algo(self):
         # Run the genetic algorithm
@@ -286,14 +288,26 @@ class TSP_GA:
         for current, next_element in zip(best, best[1:] + [best[0]]):
             if current != next_element:
                 self.pair.append((current, next_element))
+            else:
+                print("current: ", current)
+                print("next_element: ", next_element)
+                mutation = self.mutation(current)
+                print("mutation: ", mutation)
+                # on ajoute la mutation à la population
+                self.pair.append((current, mutation))
 
-        print("self.pair: ", self.pair[0][0])
+
+        print("self.pair: ", self.pair)
+        print('len(self.pair): ', len(self.pair))
 
         for i in range(len(self.pair)):
             print("self.pair[i][0]: ", self.pair[i][0])
             print("self.pair[i][1]: ", self.pair[i][1])
             child = self.ox_crossover(self.pair[i][0], self.pair[i][1])
             print("child: ", child)
+            self.population.append(child)
+            print("self.population: ", self.population)
+            print('len(self.population): ', len(self.population))
             '''self.mutation(child)
             print("child après mutation: ", child)
             print("child.distance: ", child.distance)
