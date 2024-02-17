@@ -41,7 +41,7 @@ class Graph:
             for j in range(i + 1, NB_LIEUX):
                 self.matrice_od[i, j] = self.liste_lieux[i].distance(self.liste_lieux[j])
                 self.matrice_od[j, i] = self.liste_lieux[i].distance(self.liste_lieux[j])
-        print("self.matrice_od: ", self.matrice_od)
+        #print("self.matrice_od: ", self.matrice_od)
 
     def plus_proche_voisins(self, lieu, voisins):
         try:
@@ -60,14 +60,14 @@ class Graph:
             print("df: ", df)
             for i in range(len(df)):
                 self.liste_lieux.append(Lieu(df['x'][i], df['y'][i]))
-            print("self.liste_lieux: ", self.liste_lieux)
-            print("len(self.liste_lieux): ", len(self.liste_lieux))
+            #print("self.liste_lieux: ", self.liste_lieux)
+            #print("len(self.liste_lieux): ", len(self.liste_lieux))
 
         else:
             # creation de lieux aleatoires
             for i in range(NB_LIEUX):
                 self.liste_lieux.append(Lieu(rd.uniform(0, self.largeur), rd.uniform(0, self.hauteur), str(i)))
-            print("self.liste_lieux", self.liste_lieux)
+            #print("self.liste_lieux", self.liste_lieux)
 
     def determination_ordre_ppv(self, lieu_actuel):
         ordre = [lieu_actuel]
@@ -120,9 +120,9 @@ class Route:
         return self.ordre != other.ordre
 
     def __eq__(self, other):
-        if self.ordre is None or other.ordre is None:
-            raise ValueError("Distances must be calculated before comparison.")
-        return self.ordre == other.ordre
+        if self.ordre == other.ordre and self.distance == other.distance:
+            return True
+        #return self.ordre == other.ordre
 
     '''def __le__(self, other):
         if self.distance is None or other.distance is None:
@@ -207,27 +207,29 @@ class TSP_GA:
         self.population = []
         self.best_route = None
         self.depart = None
+        self.pair = []
 
     def initialiser_population(self):
         self.depart = [self.graph.determination_ordre_ppv(lieu_actuel=i) for i in range(NB_LIEUX)]
 
         for i in range(len(self.depart)):
             self.depart[i].distance = self.graph.calcul_distance_route(self.depart[i])
-            print(self.depart[i])
+            #print(self.depart[i])
             # find 0
             index = self.depart[i].ordre.index(0)
-            print("index: ", index)
+            #print("index: ", index)
             # copy the list from index to the 0 included without the duplicates
 
             self.depart[i].ordre = self.remove_consecutive_duplicates(
                 self.depart[i].ordre[index:] + self.depart[i].ordre[:index + 1])
             self.depart[i].distance = self.graph.calcul_distance_route(self.depart[i])
-
+            #print("self.depart[i]",self.depart[i])
+            self.population = self.depart
         for route in self.depart:
             route.distance = self.graph.calcul_distance_route(route)
-        self.population = self.depart
-        print("self.depart: ", self.depart)
-        print("self.population: ", self.population)
+
+        #print("self.depart: ", self.depart)
+        #print("self.population: ", self.population)
         return self.population
 
     def selectionner_meilleurs(self):
@@ -246,5 +248,59 @@ class TSP_GA:
         return result
 
     #TODO : Crossover + mutation(2opt) + selection + affichage + gérer csv
+
+    def ox_crossover(self, parent1, parent2):
+        size = len(parent1.ordre)
+        # Choose two random crossover points
+        point1, point2 = sorted(rd.sample(range(size), 2))
+
+        # Initialize the child ordre with a copy of the segment between the crossover points from parent1
+        child_ordre = parent1.ordre[point1:point2]
+
+        # Fill in the remaining positions with genes from parent2, preserving order
+        remaining_genes = [gene for gene in parent2.ordre if gene not in child_ordre]
+        child_ordre.extend(remaining_genes)
+
+        # Create a new route for the child with the modified order
+        child_route = Route(ordre=child_ordre)
+        child_route.distance = self.graph.calcul_distance_route(child_route)
+
+        return child_route
+
+    '''def mutation(self, route):
+        # 2-opt mutation implementation
+        # Randomly select two positions in the route
+        pos1, pos2 = sorted(rd.sample(range(1, NB_LIEUX - 1), 2))
+
+        # Apply the 2-opt mutation
+        route.ordre[pos1:pos2] = route.ordre[pos1:pos2][::-1]
+        route.distance = self.graph.calcul_distance_route(route)
+
+        return route'''
+
+    def run_algo(self):
+        # Run the genetic algorithm
+        self.initialiser_population()
+        best = self.selectionner_meilleurs()
+        for current, next_element in zip(best, best[1:] + [best[0]]):
+            if current != next_element:
+                self.pair.append((current, next_element))
+
+        print("self.pair: ", self.pair[0][0])
+
+        for i in range(len(self.pair)):
+            print("self.pair[i][0]: ", self.pair[i][0])
+            print("self.pair[i][1]: ", self.pair[i][1])
+            child = self.ox_crossover(self.pair[i][0], self.pair[i][1])
+            print("child: ", child)
+            '''self.mutation(child)
+            print("child après mutation: ", child)
+            print("child.distance: ", child.distance)
+            print("self.pair[i][0].distance: ", self.pair[i][0].distance)
+            print("self.pair[i][1].distance: ", self.pair[i][1].distance)
+            if child.distance < self.pair[i][0].distance:
+                self.pair[i][0] = child
+            if child.distance < self.pair[i][1].distance:
+                self.pair[i][1] = child'''
 
 
