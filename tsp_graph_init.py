@@ -7,7 +7,7 @@ import csv
 
 
 # traveling salesman problem with genetic algorithm
-NB_LIEUX = 8
+NB_LIEUX = 4
 
 class Lieu:
     def __init__(self, xinit, yinit, nom=""):
