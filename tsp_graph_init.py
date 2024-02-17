@@ -41,7 +41,7 @@ class Graph:
             for j in range(i + 1, NB_LIEUX):
                 self.matrice_od[i, j] = self.liste_lieux[i].distance(self.liste_lieux[j])
                 self.matrice_od[j, i] = self.liste_lieux[i].distance(self.liste_lieux[j])
-        print("self.matrice_od: ", self.matrice_od)
+        #print("self.matrice_od: ", self.matrice_od)
 
     def plus_proche_voisins(self, lieu, voisins):
         try:
@@ -60,14 +60,14 @@ class Graph:
             print("df: ", df)
             for i in range(len(df)):
                 self.liste_lieux.append(Lieu(df['x'][i], df['y'][i]))
-            print("self.liste_lieux: ", self.liste_lieux)
-            print("len(self.liste_lieux): ", len(self.liste_lieux))
+            #print("self.liste_lieux: ", self.liste_lieux)
+            #print("len(self.liste_lieux): ", len(self.liste_lieux))
 
         else:
             # creation de lieux aleatoires
             for i in range(NB_LIEUX):
                 self.liste_lieux.append(Lieu(rd.uniform(0, self.largeur), rd.uniform(0, self.hauteur), str(i)))
-            print("self.liste_lieux", self.liste_lieux)
+            #print("self.liste_lieux", self.liste_lieux)
 
     def determination_ordre_ppv(self, lieu_actuel):
         ordre = [lieu_actuel]
@@ -214,19 +214,20 @@ class TSP_GA:
 
         for i in range(len(self.depart)):
             self.depart[i].distance = self.graph.calcul_distance_route(self.depart[i])
-            print(self.depart[i])
+            #print(self.depart[i])
             # find 0
             index = self.depart[i].ordre.index(0)
-            print("index: ", index)
+            #print("index: ", index)
             # copy the list from index to the 0 included without the duplicates
 
             self.depart[i].ordre = self.remove_consecutive_duplicates(
                 self.depart[i].ordre[index:] + self.depart[i].ordre[:index + 1])
             self.depart[i].distance = self.graph.calcul_distance_route(self.depart[i])
-
+            #print("self.depart[i]",self.depart[i])
+            self.population = self.depart
         for route in self.depart:
             route.distance = self.graph.calcul_distance_route(route)
-        self.population = self.depart
+
         print("self.depart: ", self.depart)
         print("self.population: ", self.population)
         return self.population
@@ -247,5 +248,4 @@ class TSP_GA:
         return result
 
     #TODO : Crossover + mutation(2opt) + selection + affichage + gérer csv
-
-
+    
