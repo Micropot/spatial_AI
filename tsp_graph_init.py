@@ -235,7 +235,7 @@ class TSP_GA:
     def selectionner_meilleurs(self):
         self.population = sorted(self.population, reverse=False)
         self.best_route = self.population[:self.elite_size]
-        print("self.best_route: ", self.best_route)
+        #print("self.best_route: ", self.best_route)
         return self.best_route
 
     def remove_consecutive_duplicates(self, route_ordre):
@@ -253,6 +253,8 @@ class TSP_GA:
         size = len(parent1.ordre)
         # Choose two random crossover points
         point1, point2 = sorted(rd.sample(range(size), 2))
+        #print("point1: ", point1)
+        #print("point2: ", point2)
 
         # Initialize the child ordre with a copy of the segment between the crossover points from parent1
         child_ordre = parent1.ordre[point1:point2]
@@ -279,28 +281,52 @@ class TSP_GA:
         return route'''
 
     def run_algo(self):
+        year = 0
+        unchanged_years = 0
         # Run the genetic algorithm
         self.initialiser_population()
-        best = self.selectionner_meilleurs()
-        for current, next_element in zip(best, best[1:] + [best[0]]):
-            if current != next_element:
-                self.pair.append((current, next_element))
 
-        print("self.pair: ", self.pair[0][0])
+        while year < self.generations:
+            best = self.selectionner_meilleurs()
+            for current, next_element in zip(best, best[1:] + [best[0]]):
+                if current != next_element:
+                    self.pair.append((current, next_element))
+                else:
+                    #print("current: ", current)
+                    #print("next_element: ", next_element)
+                    if rd.random() < self.mutation_rate:
+                        mutation = self.mutation(current)
+                        #print("mutation: ", mutation)
+                        # on ajoute la mutation à la population
+                        self.pair.append((current, mutation))
 
-        for i in range(len(self.pair)):
-            print("self.pair[i][0]: ", self.pair[i][0])
-            print("self.pair[i][1]: ", self.pair[i][1])
-            child = self.ox_crossover(self.pair[i][0], self.pair[i][1])
-            print("child: ", child)
-            '''self.mutation(child)
-            print("child après mutation: ", child)
-            print("child.distance: ", child.distance)
-            print("self.pair[i][0].distance: ", self.pair[i][0].distance)
-            print("self.pair[i][1].distance: ", self.pair[i][1].distance)
-            if child.distance < self.pair[i][0].distance:
-                self.pair[i][0] = child
-            if child.distance < self.pair[i][1].distance:
-                self.pair[i][1] = child'''
+
+            #print("self.pair: ", self.pair)
+            #print('len(self.pair): ', len(self.pair))
+
+            for i in range(len(self.pair)):
+                #print("self.pair[i][0]: ", self.pair[i][0])
+                #print("self.pair[i][1]: ", self.pair[i][1])
+                # Create two children from each pair of parents
+                for j in range(2):
+                    child = self.ox_crossover(self.pair[i][0], self.pair[i][1])
+                    #print("child: ", child)
+                    self.population.append(child)
+            #print("self.population: ", self.population)
+            #print('len(self.population): ', len(self.population))
+
+            print(f"generation {year} : {best}")
+            year += 1
+            if self.population != best:
+                unchanged_years = 0
+            else:
+                unchanged_years += 1
+            print("unchanged_years: ", unchanged_years)
+
+                # Exit if no change for 5 consecutive years
+            if unchanged_years >= 5:
+                print("No change for 5 consecutive years. Exiting.")
+                break
+
 
 
