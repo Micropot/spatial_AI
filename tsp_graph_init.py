@@ -7,7 +7,7 @@ import csv
 
 
 # traveling salesman problem with genetic algorithm
-NB_LIEUX = 4
+NB_LIEUX = 8
 
 class Lieu:
     def __init__(self, xinit, yinit, nom=""):
@@ -86,7 +86,7 @@ class Graph:
             distance += self.matrice_od[route.ordre[i], route.ordre[i+1]]
         print("distance: ", distance)
         Route.distance = distance
-        return distance
+        return distance         
 
 
 class Route:
