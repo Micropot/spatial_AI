@@ -6,15 +6,33 @@ def main():
     MyGraph.charger_graph()
     MyGraph.calcul_matrice_cout_od()
     #MyGraph.plus_proche_voisins(lieu=0, voisins=list(range(MyGraph.nb_lieux)))
-    #MyGraph.determination_ordre_ppv()
-    MyGraph.calcul_distance_route(MyGraph.determination_ordre_ppv())
-    #Route aléatoire
-    MyRoute = tsp_graph_init.Route(ordre=None)
-    print("ordre route ppv : ",MyGraph.determination_ordre_ppv().ordre)
-    print("ordre route aléatoire : ",MyRoute.ordre)
-    distance = MyGraph.calcul_distance_route(MyRoute)
 
-    affichage = tsp_graph_init.Affichage(MyGraph, ordre=MyGraph.determination_ordre_ppv().ordre, distance=distance)
-    affichage.executer()
+
+    #Route_ppv = MyGraph.determination_ordre_ppv()
+    #Route_ppv.distance = MyGraph.calcul_distance_route(Route_ppv)
+
+
+    #Route aléatoire
+    #MyRoute = tsp_graph_init.Route(ordre=None)
+    #print("ordre route ppv : ",MyGraph.determination_ordre_ppv())
+    #print("ordre route aléatoire : ",MyRoute)
+    #MyRoute.distance = MyGraph.calcul_distance_route(MyRoute)
+    #print("distance route aléatoire : ",distance)
+
+
+    #affichage = tsp_graph_init.Affichage(MyGraph, ordre=Route_ppv.ordre, distance=Route_ppv.distance)
+    #affichage.executer()
+
+
+    #print("GRAPH_ppv : ",Route_ppv)
+    #print("ROUTE_aléatoire : ",MyRoute)
+
+    algo = tsp_graph_init.TSP_GA(MyGraph, population_size=10, elite_size=5, mutation_rate=0.01, generations=100)
+    algo.initialiser_population()
+    algo.selectionner_meilleurs()
+
+
+
 if __name__ == '__main__':
     main()
+
