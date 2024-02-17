@@ -269,7 +269,7 @@ class TSP_GA:
 
         return child_route
 
-    '''def mutation(self, route):
+    def mutation(self, route):
         # 2-opt mutation implementation
         # Randomly select two positions in the route
         pos1, pos2 = sorted(rd.sample(range(1, NB_LIEUX - 1), 2))
@@ -278,7 +278,7 @@ class TSP_GA:
         route.ordre[pos1:pos2] = route.ordre[pos1:pos2][::-1]
         route.distance = self.graph.calcul_distance_route(route)
 
-        return route'''
+        return route
 
     def run_algo(self):
         year = 0
@@ -312,11 +312,12 @@ class TSP_GA:
                     child = self.ox_crossover(self.pair[i][0], self.pair[i][1])
                     #print("child: ", child)
                     self.population.append(child)
-            #print("self.population: ", self.population)
+            print("self.population: ", self.population)
             #print('len(self.population): ', len(self.population))
 
             print(f"generation {year} : {best}")
             year += 1
+            print("generation: ", year)
             if self.population != best:
                 unchanged_years = 0
             else:
