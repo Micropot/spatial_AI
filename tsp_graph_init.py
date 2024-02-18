@@ -6,7 +6,7 @@ import tkinter as tk
 import csv
 
 # traveling salesman problem with genetic algorithm
-NB_LIEUX = 10
+NB_LIEUX = 20
 
 
 class Lieu:
@@ -276,6 +276,7 @@ class TSP_GA:
         return child_route
 
     def mutation(self, route):
+        print("mutation")
         # 2-opt mutation implementation
         # Randomly select two positions in the route
         pos1, pos2 = sorted(rd.sample(range(1, NB_LIEUX - 1), 2))
@@ -287,6 +288,10 @@ class TSP_GA:
         return route
 
     def run_algo(self):
+        #TODO : affichages des N meilleurs routes + meilleure distance + nombre d'itération pour trouver cette disstance + itétaion actuelle
+
+
+
         year = 0
         unchanged_years = 0
         # Run the genetic algorithm
@@ -314,15 +319,13 @@ class TSP_GA:
             # print('len(self.pair): ', len(self.pair))
 
             for i in range(len(self.pair)):
-                # print("self.pair[i][0]: ", self.pair[i][0])
-                # print("self.pair[i][1]: ", self.pair[i][1])
+
                 # Create two children from each pair of parents
                 for j in range(2):
                     child = self.ox_crossover(self.pair[i][0], self.pair[i][1])
-                    # print("child: ", child)
+
                     self.population.append(child)
-            # print("self.population: ", self.population)
-            # print('len(self.population): ', len(self.population))
+
 
             print(f"generation {year} : {best}")
             year += 1
