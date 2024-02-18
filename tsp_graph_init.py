@@ -41,7 +41,7 @@ class Graph:
             for j in range(i + 1, NB_LIEUX):
                 self.matrice_od[i, j] = self.liste_lieux[i].distance(self.liste_lieux[j])
                 self.matrice_od[j, i] = self.liste_lieux[i].distance(self.liste_lieux[j])
-        #print("self.matrice_od: ", self.matrice_od)
+        # print("self.matrice_od: ", self.matrice_od)
 
     def plus_proche_voisins(self, lieu, voisins):
         try:
@@ -60,14 +60,14 @@ class Graph:
             print("df: ", df)
             for i in range(len(df)):
                 self.liste_lieux.append(Lieu(df['x'][i], df['y'][i]))
-            #print("self.liste_lieux: ", self.liste_lieux)
-            #print("len(self.liste_lieux): ", len(self.liste_lieux))
+            # print("self.liste_lieux: ", self.liste_lieux)
+            # print("len(self.liste_lieux): ", len(self.liste_lieux))
 
         else:
             # creation de lieux aleatoires
             for i in range(NB_LIEUX):
                 self.liste_lieux.append(Lieu(rd.uniform(0, self.largeur), rd.uniform(0, self.hauteur), str(i)))
-            #print("self.liste_lieux", self.liste_lieux)
+            # print("self.liste_lieux", self.liste_lieux)
 
     def determination_ordre_ppv(self, lieu_actuel):
         ordre = [lieu_actuel]
@@ -123,7 +123,7 @@ class Route:
     def __eq__(self, other):
         if self.ordre == other.ordre and self.distance == other.distance:
             return True
-        #return self.ordre == other.ordre
+        # return self.ordre == other.ordre
 
     '''def __le__(self, other):
         if self.distance is None or other.distance is None:
@@ -193,9 +193,16 @@ class Affichage:
     def quitter(self):
         self.fenetre.destroy()
 
-    def executer(self):
+    def executer(self, ordre):
         self.afficher_lieux()
-        self.fenetre.mainloop()
+        self.afficher_ordre(ordre)
+        for i in range(len(ordre) - 1):
+            self.canvas.delete('all')
+            self.afficher_lieux()
+            self.afficher_ordre(ordre)
+
+        self.fenetre.update()
+        #self.fenetre.mainloop()
 
 
 class TSP_GA:
@@ -215,28 +222,28 @@ class TSP_GA:
 
         for i in range(len(self.depart)):
             self.depart[i].distance = self.graph.calcul_distance_route(self.depart[i])
-            #print(self.depart[i])
+            # print(self.depart[i])
             # find 0
             index = self.depart[i].ordre.index(0)
-            #print("index: ", index)
+            # print("index: ", index)
             # copy the list from index to the 0 included without the duplicates
 
             self.depart[i].ordre = self.remove_consecutive_duplicates(
                 self.depart[i].ordre[index:] + self.depart[i].ordre[:index + 1])
             self.depart[i].distance = self.graph.calcul_distance_route(self.depart[i])
-            #print("self.depart[i]",self.depart[i])
+            # print("self.depart[i]",self.depart[i])
             self.population = self.depart
         for route in self.depart:
             route.distance = self.graph.calcul_distance_route(route)
 
-        #print("self.depart: ", self.depart)
-        #print("self.population: ", self.population)
+        # print("self.depart: ", self.depart)
+        # print("self.population: ", self.population)
         return self.population
 
     def selectionner_meilleurs(self):
         self.population = sorted(self.population, reverse=False)
         self.best_route = self.population[:self.elite_size]
-        #print("self.best_route: ", self.best_route)
+        # print("self.best_route: ", self.best_route)
         return self.best_route
 
     def remove_consecutive_duplicates(self, route_ordre):
@@ -252,8 +259,8 @@ class TSP_GA:
         size = len(parent1.ordre)
         # Choose two random crossover points
         point1, point2 = sorted(rd.sample(range(size), 2))
-        #print("point1: ", point1)
-        #print("point2: ", point2)
+        # print("point1: ", point1)
+        # print("point2: ", point2)
 
         # Initialize the child ordre with a copy of the segment between the crossover points from parent1
         child_ordre = parent1.ordre[point1:point2]
@@ -284,48 +291,52 @@ class TSP_GA:
         unchanged_years = 0
         # Run the genetic algorithm
         self.initialiser_population()
+        affichage = Affichage(self.graph, self.population[0].ordre, self.population[0].distance)
+        # affichage.afficher_ordre(self.population[0].ordre)
+        # affichage.executer(self.population[0].ordre)
 
         while year < self.generations:
             best = self.selectionner_meilleurs()
+            # affichage = Affichage(self.graph, self.best_route[0].ordre, self.best_route[0].distance)
             for current, next_element in zip(best, best[1:] + [best[0]]):
                 if current != next_element:
                     self.pair.append((current, next_element))
                 else:
-                    #print("current: ", current)
-                    #print("next_element: ", next_element)
+                    # print("current: ", current)
+                    # print("next_element: ", next_element)
                     if rd.random() < self.mutation_rate:
                         mutation = self.mutation(current)
-                        #print("mutation: ", mutation)
+                        # print("mutation: ", mutation)
                         # on ajoute la mutation à la population
                         self.pair.append((current, mutation))
 
-
-            #print("self.pair: ", self.pair)
-            #print('len(self.pair): ', len(self.pair))
+            # print("self.pair: ", self.pair)
+            # print('len(self.pair): ', len(self.pair))
 
             for i in range(len(self.pair)):
-                #print("self.pair[i][0]: ", self.pair[i][0])
-                #print("self.pair[i][1]: ", self.pair[i][1])
+                # print("self.pair[i][0]: ", self.pair[i][0])
+                # print("self.pair[i][1]: ", self.pair[i][1])
                 # Create two children from each pair of parents
                 for j in range(2):
                     child = self.ox_crossover(self.pair[i][0], self.pair[i][1])
-                    #print("child: ", child)
+                    # print("child: ", child)
                     self.population.append(child)
-            #print("self.population: ", self.population)
-            #print('len(self.population): ', len(self.population))
+            # print("self.population: ", self.population)
+            # print('len(self.population): ', len(self.population))
 
             print(f"generation {year} : {best}")
             year += 1
+
             if self.population != best:
                 unchanged_years = 0
             else:
                 unchanged_years += 1
             print("unchanged_years: ", unchanged_years)
 
-                # Exit if no change for 5 consecutive years
+            # Exit if no change for 5 consecutive years
             if unchanged_years >= 5:
                 print("No change for 5 consecutive years. Exiting.")
                 break
 
-
-
+            affichage.executer(self.best_route[0].ordre)
+        affichage.fenetre.mainloop()
