@@ -1,1 +1,4 @@
 Problème du voyageur de commerce avec algorithme génétique
+
+Le problème du voyageur de commerce est un problème d'optimisation consistant à déterminer le plus court chemin reliant un ensemble de villes. Le problème est NP-complet, c'est-à-dire qu'il n'existe pas d'algorithme permettant de le résoudre en un temps raisonnable. Cependant, il existe des algorithmes permettant de trouver une solution approchée en un temps raisonnable. L'algorithme génétique est l'un de ces algorithmes.
+L'utilisation de l'algorithme génétique pour résoudre le problème du voyageur de commerce consiste à représenter une solution potentielle (un chemin reliant les villes) sous forme de chromosome, puis à utiliser les opérateurs génétiques (sélection, croisement, mutation) pour faire évoluer les solutions vers une solution optimale.

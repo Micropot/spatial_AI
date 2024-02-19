@@ -58,7 +58,7 @@ class Graph:
     def charger_graph(self):
         if self.csv_file is not None:
             df = pd.read_csv(self.csv_file)
-            print("df: ", df)
+            #print("df: ", df)
             for i in range(len(df)):
                 self.liste_lieux.append(Lieu(df['x'][i], df['y'][i]))
             #print("self.liste_lieux: ", self.liste_lieux)
@@ -155,10 +155,11 @@ class Affichage:
         self.fenetre.protocol("WM_DELETE_WINDOW", self.quitter)
 
     def afficher_lieux(self):
-        for lieu in self.graph.liste_lieux:
+        for index, lieu in enumerate(self.graph.liste_lieux):
             x, y = lieu.x, lieu.y
+            # Display the index in the oval
             self.canvas.create_oval(x - 10, y - 10, x + 10, y + 10, fill="red")
-            self.canvas.create_text(x, y, text=lieu.nom, fill="black")
+            self.canvas.create_text(x, y, text=str(index), fill="black")
 
     def afficher_ordre(self, ordre):
         for i in range(len(ordre) - 1):
@@ -193,9 +194,21 @@ class Affichage:
     def quitter(self):
         self.fenetre.destroy()
 
-    def executer(self):
+    def executer(self, ordre, best_distance, iterations):
         self.afficher_lieux()
-        self.fenetre.mainloop()
+        self.afficher_ordre(ordre)
+        for i in range(len(ordre) - 1):
+            self.canvas.delete('all')
+            self.afficher_lieux()
+            self.afficher_ordre(ordre)
+
+            info_text = f"Meilleure distance : {best_distance}\n"
+            info_text += f"Iterations : {iterations}\n"
+
+            self.afficher_infos(info_text)
+
+        self.fenetre.update()
+        #self.fenetre.mainloop()
 
 
 class TSP_GA:
@@ -281,11 +294,19 @@ class TSP_GA:
 
         return route
 
+
+
     def run_algo(self):
         year = 0
         unchanged_years = 0
         # Run the genetic algorithm
         self.initialiser_population()
+        affichage = Affichage(self.graph, self.population[0].ordre, self.population[0].distance)
+        # affichage.afficher_ordre(self.population[0].ordre)
+        # affichage.executer(self.population[0].ordre)
+
+
+
 
         while year < self.generations:
             best = self.selectionner_meilleurs()
@@ -330,5 +351,5 @@ class TSP_GA:
                 print("No change for 5 consecutive years. Exiting.")
                 break
 
-
-
+            affichage.executer(self.best_route[0].ordre, self.best_route[0].distance, year)
+        affichage.fenetre.mainloop()
