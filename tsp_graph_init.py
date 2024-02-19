@@ -195,7 +195,7 @@ class Affichage:
             self.quitter()
         elif event.char == 'n':
             self.afficher_ordre(self.ordre, 'gray')
-            self.afficher_matrice_cout()
+
         elif event.char == 'i':
             infos = f"Distance parcourue : {self.distance:.2f}\n"
             self.afficher_infos(infos)
@@ -225,9 +225,9 @@ class Affichage:
 
 
 class TSP_GA:
-    def __init__(self, graph, population_size, elite_size, mutation_rate, generations):
+    def __init__(self, graph, elite_size, mutation_rate, generations):
         self.graph = graph
-        self.population_size = population_size
+        #self.population_size = population_size
         self.elite_size = elite_size
         self.mutation_rate = mutation_rate
         self.generations = generations
@@ -295,7 +295,7 @@ class TSP_GA:
         return child_route
 
     def mutation(self, route):
-        print("mutation")
+        #print("mutation")
         # 2-opt mutation implementation
         # Randomly select two positions in the route
         pos1, pos2 = sorted(rd.sample(range(1, NB_LIEUX - 1), 2))
@@ -355,7 +355,7 @@ class TSP_GA:
                     self.population.append(child)
 
 
-            print(f"generation {year} : {best}")
+            #print(f"generation {year} : {best}")
             year += 1
 
             '''if last_best != best[0]:
