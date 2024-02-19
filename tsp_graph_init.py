@@ -191,7 +191,9 @@ class Affichage:
         elif event.char == 'i':
             infos = f"Distance parcourue : {self.distance:.2f}\n"
             self.afficher_infos(infos)
-
+        #pause the program
+        elif event.char == 'p':
+            time.sleep(5)
     def quitter(self):
         self.fenetre.destroy()
 
@@ -297,7 +299,7 @@ class TSP_GA:
 
 
     def run_algo(self):
-        #TODO : affichages des N meilleurs routes + meilleure distance + nombre d'itération pour trouver cette disstance + itétaion actuelle
+        #TODO : touche pour afficher ou non les meilleurs routes + pause ?
 
 
 
