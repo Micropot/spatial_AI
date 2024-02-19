@@ -196,7 +196,7 @@ class Affichage:
 
     def executer(self, ordre, best_distance, iterations):
         self.afficher_lieux()
-        self.afficher_ordre(ordre)
+        #self.afficher_ordre(ordre, 'blue')
         for i in range(len(ordre) - 1):
             self.canvas.delete('all')
             self.afficher_lieux()
@@ -309,6 +309,7 @@ class TSP_GA:
 
 
         while year < self.generations:
+            affichage.fenetre.bind("<Key>", affichage.gerer_touche)
             best = self.selectionner_meilleurs()
             for current, next_element in zip(best, best[1:] + [best[0]]):
                 if current != next_element:
