@@ -315,9 +315,9 @@ class TSP_GA:
             print("self.population: ", self.population)
             #print('len(self.population): ', len(self.population))
 
-            print(f"generation {year} : {best}")
+            print(f"generation {year} : {best[0]}")
             year += 1
-            print("generation: ", year)
+            #print("generation: ", year)
             if self.population != best:
                 unchanged_years = 0
             else:
