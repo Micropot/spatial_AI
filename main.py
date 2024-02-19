@@ -27,7 +27,7 @@ def main():
     #print("GRAPH_ppv : ",Route_ppv)
     #print("ROUTE_aléatoire : ",MyRoute)
 
-    algo = tsp_graph_init.TSP_GA(MyGraph, population_size=10, elite_size=5, mutation_rate=0.5, generations=200)
+    algo = tsp_graph_init.TSP_GA(MyGraph, population_size=10, elite_size=5, mutation_rate=0.5, generations=100)
     #algo.initialiser_population()
     #algo.selectionner_meilleurs()
 
