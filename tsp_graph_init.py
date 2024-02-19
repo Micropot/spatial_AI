@@ -193,13 +193,18 @@ class Affichage:
     def quitter(self):
         self.fenetre.destroy()
 
-    def executer(self, ordre):
+    def executer(self, ordre, best_distance, iterations):
         self.afficher_lieux()
         self.afficher_ordre(ordre)
         for i in range(len(ordre) - 1):
             self.canvas.delete('all')
             self.afficher_lieux()
             self.afficher_ordre(ordre)
+
+            info_text = f"Meilleure distance : {best_distance}\n"
+            info_text += f"Iterations : {iterations}\n"
+
+            self.afficher_infos(info_text)
 
         self.fenetre.update()
         #self.fenetre.mainloop()
@@ -341,5 +346,5 @@ class TSP_GA:
                 print("No change for 5 consecutive years. Exiting.")
                 break
 
-            affichage.executer(self.best_route[0].ordre)
+            affichage.executer(self.best_route[0].ordre, self.best_route[0].distance, year)
         affichage.fenetre.mainloop()
