@@ -185,7 +185,7 @@ class Affichage:
         if event.keysym == "Escape":
             self.quitter()
         elif event.char == 'n':
-            self.afficher_ordre(self.ordre)
+            #self.afficher_ordre(self.ordre)
             self.afficher_matrice_cout()
         elif event.char == 'i':
             infos = f"Distance parcourue : {self.distance:.2f}\n"
