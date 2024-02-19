@@ -157,16 +157,15 @@ class Affichage:
     def afficher_lieux(self):
         for index, lieu in enumerate(self.graph.liste_lieux):
             x, y = lieu.x, lieu.y
-            fill_color = "red" if index == 0 else "white"
             # Display the index in the oval
-            self.canvas.create_oval(x - 10, y - 10, x + 10, y + 10, fill=fill_color, outline="black")
+            self.canvas.create_oval(x - 10, y - 10, x + 10, y + 10, fill="red")
             self.canvas.create_text(x, y, text=str(index), fill="black")
 
-    def afficher_ordre(self, ordre, color):
+    def afficher_ordre(self, ordre):
         for i in range(len(ordre) - 1):
             x1, y1 = self.graph.liste_lieux[ordre[i]].x, self.graph.liste_lieux[ordre[i]].y
             x2, y2 = self.graph.liste_lieux[ordre[i + 1]].x, self.graph.liste_lieux[ordre[i + 1]].y
-            self.canvas.create_line(x1, y1, x2, y2, fill=color, width=2, dash=(4, 4))
+            self.canvas.create_line(x1, y1, x2, y2, fill="blue", width=2, dash=(4, 4))
 
     def afficher_infos(self, infos):
         self.texte_info.delete(1.0, tk.END)
@@ -186,24 +185,22 @@ class Affichage:
         if event.keysym == "Escape":
             self.quitter()
         elif event.char == 'n':
-            self.afficher_ordre(self.ordre, 'gray')
+            self.afficher_ordre(self.ordre)
             self.afficher_matrice_cout()
         elif event.char == 'i':
             infos = f"Distance parcourue : {self.distance:.2f}\n"
             self.afficher_infos(infos)
-        #pause the program
-        elif event.char == 'p':
-            time.sleep(5)
+
     def quitter(self):
         self.fenetre.destroy()
 
     def executer(self, ordre, best_distance, iterations):
         self.afficher_lieux()
-        self.afficher_ordre(ordre, 'blue')
+        self.afficher_ordre(ordre)
         for i in range(len(ordre) - 1):
             self.canvas.delete('all')
             self.afficher_lieux()
-            self.afficher_ordre(ordre, 'blue')
+            self.afficher_ordre(ordre)
 
             info_text = f"Meilleure distance : {best_distance}\n"
             info_text += f"Iterations : {iterations}\n"
@@ -300,10 +297,6 @@ class TSP_GA:
 
 
     def run_algo(self):
-        #TODO : touche pour afficher ou non les meilleurs routes + pause ?
-
-
-
         year = 0
         unchanged_years = 0
         # Run the genetic algorithm
@@ -317,8 +310,6 @@ class TSP_GA:
 
         while year < self.generations:
             best = self.selectionner_meilleurs()
-            #last_best = best[0]
-            # affichage = Affichage(self.graph, self.best_route[0].ordre, self.best_route[0].distance)
             for current, next_element in zip(best, best[1:] + [best[0]]):
                 if current != next_element:
                     self.pair.append((current, next_element))
@@ -348,17 +339,17 @@ class TSP_GA:
 
             print(f"generation {year} : {best[0]}")
             year += 1
-
-            '''if last_best != best[0]:
+            #print("generation: ", year)
+            if self.population != best:
                 unchanged_years = 0
             else:
                 unchanged_years += 1
             print("unchanged_years: ", unchanged_years)
 
-            # Exit if no change for 5 consecutive years
-            if unchanged_years >= 10:
+                # Exit if no change for 5 consecutive years
+            if unchanged_years >= 5:
                 print("No change for 5 consecutive years. Exiting.")
-                break'''
+                break
 
             affichage.executer(self.best_route[0].ordre, self.best_route[0].distance, year)
         affichage.fenetre.mainloop()
