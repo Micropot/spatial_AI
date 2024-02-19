@@ -162,6 +162,14 @@ class Affichage:
             self.canvas.create_oval(x - 10, y - 10, x + 10, y + 10, fill=fill_color, outline="black")
             self.canvas.create_text(x, y, text=str(index), fill="black")
 
+    def afficher_numero(self, ordre):
+        for i, node_index in enumerate(ordre[:-1]):
+            lieu = self.graph.liste_lieux[node_index]
+            x, y = lieu.x, lieu.y
+
+            # Display the order above the circle
+            self.canvas.create_text(x, y - 15, text=str(i), fill="black")
+
     def afficher_ordre(self, ordre, color):
         for i in range(len(ordre) - 1):
             x1, y1 = self.graph.liste_lieux[ordre[i]].x, self.graph.liste_lieux[ordre[i]].y
@@ -198,19 +206,21 @@ class Affichage:
         self.fenetre.destroy()
 
     def executer(self, ordre, best_distance, iterations):
-        self.afficher_lieux()
+        #self.afficher_lieux()
         #self.afficher_ordre(ordre, 'blue')
         for i in range(len(ordre) - 1):
             self.canvas.delete('all')
-            self.afficher_lieux()
+
             self.afficher_ordre(ordre, 'blue')
 
             info_text = f"Meilleure distance : {best_distance}\n"
             info_text += f"Iterations : {iterations}\n"
 
             self.afficher_infos(info_text)
-
+            self.afficher_numero(ordre)
+        self.afficher_lieux()
         self.fenetre.update()
+        self.fenetre.update_idletasks()
         #self.fenetre.mainloop()
 
 
@@ -265,9 +275,9 @@ class TSP_GA:
         return result
 
     def ox_crossover(self, parent1, parent2):
-        size = len(parent1.ordre)
+        #size = len(parent1.ordre)
         # Choose two random crossover points
-        point1, point2 = sorted(rd.sample(range(size), 2))
+        point1, point2 = sorted(rd.sample(range(1, NB_LIEUX - 1), 2))
         # print("point1: ", point1)
         # print("point2: ", point2)
 
@@ -308,6 +318,8 @@ class TSP_GA:
         # Run the genetic algorithm
         self.initialiser_population()
         affichage = Affichage(self.graph, self.population[0].ordre, self.population[0].distance)
+
+
         # affichage.afficher_ordre(self.population[0].ordre)
         # affichage.executer(self.population[0].ordre)
 
