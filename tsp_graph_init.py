@@ -7,6 +7,7 @@ import csv
 
 # traveling salesman problem with genetic algorithm
 NB_LIEUX = 20
+NB_LIEUX = 20
 
 
 class Lieu:
