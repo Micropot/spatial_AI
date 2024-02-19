@@ -155,10 +155,11 @@ class Affichage:
         self.fenetre.protocol("WM_DELETE_WINDOW", self.quitter)
 
     def afficher_lieux(self):
-        for lieu in self.graph.liste_lieux:
+        for index, lieu in enumerate(self.graph.liste_lieux):
             x, y = lieu.x, lieu.y
+            # Display the index in the oval
             self.canvas.create_oval(x - 10, y - 10, x + 10, y + 10, fill="red")
-            self.canvas.create_text(x, y, text=lieu.nom, fill="black")
+            self.canvas.create_text(x, y, text=str(index), fill="black")
 
     def afficher_ordre(self, ordre):
         for i in range(len(ordre) - 1):
