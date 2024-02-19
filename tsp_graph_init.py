@@ -57,7 +57,7 @@ class Graph:
     def charger_graph(self):
         if self.csv_file is not None:
             df = pd.read_csv(self.csv_file)
-            print("df: ", df)
+            #print("df: ", df)
             for i in range(len(df)):
                 self.liste_lieux.append(Lieu(df['x'][i], df['y'][i]))
             # print("self.liste_lieux: ", self.liste_lieux)
@@ -293,6 +293,8 @@ class TSP_GA:
 
         return route
 
+
+
     def run_algo(self):
         #TODO : affichages des N meilleurs routes + meilleure distance + nombre d'itération pour trouver cette disstance + itétaion actuelle
 
@@ -305,6 +307,9 @@ class TSP_GA:
         affichage = Affichage(self.graph, self.population[0].ordre, self.population[0].distance)
         # affichage.afficher_ordre(self.population[0].ordre)
         # affichage.executer(self.population[0].ordre)
+
+
+
 
         while year < self.generations:
             best = self.selectionner_meilleurs()
