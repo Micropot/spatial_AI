@@ -255,7 +255,7 @@ class TSP_GA:
         for route in self.depart:
             route.distance = self.graph.calcul_distance_route(route)
 
-        # print("self.depart: ", self.depart)
+        print("self.depart: ", self.depart)
         # print("self.population: ", self.population)
         return self.population
 
@@ -286,8 +286,11 @@ class TSP_GA:
 
         # Fill in the remaining positions with genes from parent2, preserving order
         remaining_genes = [gene for gene in parent2.ordre if gene not in child_ordre]
-        child_ordre.extend(remaining_genes)
 
+        child_ordre.extend(remaining_genes)
+        zero_index = child_ordre.index(0)
+        child_ordre = child_ordre[zero_index:] + child_ordre[:zero_index + 1]
+        child_ordre = self.remove_consecutive_duplicates(child_ordre)
         # Create a new route for the child with the modified order
         child_route = Route(ordre=child_ordre)
         child_route.distance = self.graph.calcul_distance_route(child_route)
@@ -302,6 +305,9 @@ class TSP_GA:
 
         # Apply the 2-opt mutation
         route.ordre[pos1:pos2] = route.ordre[pos1:pos2][::-1]
+        zero = route.ordre.index(0)
+        route.ordre = route.ordre[zero:] + route.ordre[:zero + 1]
+        route.ordre = self.remove_consecutive_duplicates(route.ordre)
         route.distance = self.graph.calcul_distance_route(route)
 
         return route
@@ -351,6 +357,7 @@ class TSP_GA:
                 # Create two children from each pair of parents
                 for j in range(2):
                     child = self.ox_crossover(self.pair[i][0], self.pair[i][1])
+                    print("child : ", child)
 
                     self.population.append(child)
 
